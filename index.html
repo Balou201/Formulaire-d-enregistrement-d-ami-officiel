@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Questionnaire d’Ami Officiel 📝</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    input, button { padding: 10px; width: 100%; margin: 5px 0; }
+    #codeField { margin-top: 20px; background: #eee; padding: 10px; font-family: monospace; }
+  </style>
+</head>
+<body>
+
+  <h1>💌 Questionnaire d’Enregistrement d’Ami Officiel</h1>
+
+  <p>Merci de bien vouloir remplir ces informations. Elles serviront uniquement à compléter votre Fiche d’Amitié officielle.</p>
+
+  <!-- Champ pour entrer un code déjà existant -->
+  <label>🔑 Entrer un code pour retrouver tes réponses :</label>
+  <input type="text" id="inputCode" placeholder="Colle ton code ici">
+  <button onclick="loadFromCode()">🔄 Charger les réponses</button>
+
+  <hr>
+
+  <!-- Formulaire -->
+  <form id="friendForm">
+    <label>Nom de famille :</label>
+    <input type="text" id="nom">
+
+    <label>Prénom :</label>
+    <input type="text" id="prenom">
+
+    <label>Date de naissance :</label>
+    <input type="date" id="dob">
+
+    <button type="button" onclick="generateCode()">🎁 Générer mon code secret</button>
+  </form>
+
+  <!-- Code généré -->
+  <div id="codeField" style="display: none;"></div>
+
+  <script>
+    function generateCode() {
+      const data = {
+        nom: document.getElementById('nom').value,
+        prenom: document.getElementById('prenom').value,
+        dob: document.getElementById('dob').value,
+      };
+      const json = JSON.stringify(data);
+      const code = btoa(json); // Encode en base64
+      document.getElementById('codeField').style.display = 'block';
+      document.getElementById('codeField').textContent = "Ton code secret : " + code;
+    }
+
+    function loadFromCode() {
+      const code = document.getElementById('inputCode').value;
+      try {
+        const json = atob(code);
+        const data = JSON.parse(json);
+        document.getElementById('nom').value = data.nom || '';
+        document.getElementById('prenom').value = data.prenom || '';
+        document.getElementById('dob').value = data.dob || '';
+        alert("Formulaire rechargé avec succès !");
+      } catch (e) {
+        alert("Code invalide !");
+      }
+    }
+  </script>
+
+</body>
+</html>
